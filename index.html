@@ -2,30 +2,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>ArkhamCore</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            font-family: 'Cinzel', serif;
-            background: url('background.png') no-repeat center center fixed;
-            background-size: cover;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        h1 {
-            font-size: 4em;
-            text-shadow: 0 0 10px #000;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>ArkhamCore</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-family: 'Cinzel', serif;
+      color: #00ffaa;
+      background: #000;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      opacity: 0.4;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .main-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 5rem;
+      text-shadow: 0 0 20px #00ffaa99;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      font-family: monospace;
+      color: #00ffaa44;
+      font-size: 0.8rem;
+    }
+  </style>
 </head>
 <body>
-    <h1>ArkhamCore</h1>
+  <div class="main-content">
+    <h1>ARKHAMCORE</h1>
+    <p class="footer">[ SYSTEM CORE ACTIVE // MONITORING EXTERNAL SIGNALS ]</p>
+  </div>
 </body>
 </html>
