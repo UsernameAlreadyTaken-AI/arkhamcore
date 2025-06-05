@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,29 +12,29 @@
       width: 100%;
       font-family: 'Cinzel', serif;
       color: #00ffaa;
-      background: #000;
+      background: url('background3.png') no-repeat center center fixed;
+      background-size: cover;
       overflow: hidden;
     }
 
-    body::before {
-      content: "";
-      background: url('https://usernamealreadytaken-ai.github.io/arkhamcore/background3.png') no-repeat center center fixed;
-      background-size: cover;
-      opacity: 0.5;
+    .overlay {
+      background: rgba(0, 0, 0, 0.4);
       position: absolute;
       top: 0; left: 0;
       width: 100%;
       height: 100%;
-      z-index: -1;
+      z-index: 0;
     }
 
     .main-content {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
       height: 100%;
       text-align: center;
+      z-index: 1;
     }
 
     h1 {
@@ -51,10 +50,12 @@
       font-family: monospace;
       color: #00ffaa44;
       font-size: 0.8rem;
+      z-index: 1;
     }
   </style>
 </head>
 <body>
+  <div class="overlay"></div>
   <div class="main-content">
     <h1>ARKHAMCORE</h1>
     <p class="footer">[ SYSTEM CORE ACTIVE // MONITORING EXTERNAL SIGNALS ]</p>
