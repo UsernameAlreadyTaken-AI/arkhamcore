@@ -11,6 +11,7 @@
       --muted:#475569;
       --head:#f8fafc;
       --shadow: 0 1px 2px rgba(0,0,0,.04);
+      --focus:#94a3b8;
     }
     body{
       margin:0;
@@ -40,7 +41,21 @@
     .hint{
       font-size:12px;
       color:var(--muted);
+      line-height:1.3;
     }
+    .status{
+      font-size:12px;
+      color:var(--muted);
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:999px;background:#94a3b8;display:inline-block;
+    }
+    .dot.ok{ background:#22c55e; }
+    .dot.bad{ background:#ef4444; }
 
     table.responsive{
       width:100%;
@@ -82,6 +97,19 @@
     .badge-low{ background:#fee2e2; border-color:#fecaca; }
     .badge-high{ background:#dcfce7; border-color:#bbf7d0; }
 
+    /* editable cells */
+    td[contenteditable="true"]{
+      background:#fff;
+      outline: none;
+    }
+    td[contenteditable="true"]:focus{
+      box-shadow: inset 0 0 0 2px var(--focus);
+      border-color: transparent;
+    }
+    td[contenteditable="true"][data-saving="true"]{
+      background:#f8fafc;
+    }
+
     @media (max-width: 720px){
       table.responsive thead{ display:none; }
       table.responsive, table.responsive tbody, table.responsive tr, table.responsive td{
@@ -119,261 +147,374 @@
     <div class="topbar">
       <div>
         <h1 class="title">Veterans</h1>
-        <div class="hint">Clique sur un en-tête (Position, Username, etc.) pour trier. Re-clique pour inverser.</div>
+        <div class="hint">
+          Desktop : clique sur un en-tête (Position, Username, etc.) pour trier (re-clique = inverse).<br>
+          Shooter 1 / Shooter 2 / Following : clique dans la cellule pour écrire, puis clique ailleurs (auto-save).
+        </div>
+      </div>
+      <div class="status" id="status">
+        <span class="dot" id="statusDot"></span>
+        <span id="statusText">Chargement…</span>
       </div>
     </div>
 
     <table class="responsive" id="veteransTable">
       <thead>
         <tr>
-          <th data-key="position" data-type="position">Position<span class="sort-ind"></span></th>
-          <th data-key="username" data-type="text">Username<span class="sort-ind"></span></th>
-          <th data-key="plating" data-type="plating">Plating<span class="sort-ind"></span></th>
-          <th data-key="rank" data-type="text">Rank<span class="sort-ind"></span></th>
-          <th data-key="family" data-type="text">Family<span class="sort-ind"></span></th>
-          <th data-key="shooter1" data-type="text">Shooter 1<span class="sort-ind"></span></th>
-          <th data-key="shooter2" data-type="text">Shooter 2<span class="sort-ind"></span></th>
-          <th data-key="following" data-type="text">Following<span class="sort-ind"></span></th>
+          <th data-type="position">Position<span class="sort-ind"></span></th>
+          <th data-type="text">Username<span class="sort-ind"></span></th>
+          <th data-type="plating">Plating<span class="sort-ind"></span></th>
+          <th data-type="text">Rank<span class="sort-ind"></span></th>
+          <th data-type="text">Family<span class="sort-ind"></span></th>
+          <th data-type="text">Shooter 1<span class="sort-ind"></span></th>
+          <th data-type="text">Shooter 2<span class="sort-ind"></span></th>
+          <th data-type="text">Following<span class="sort-ind"></span></th>
         </tr>
       </thead>
 
-<tbody>
-  <tr>
-    <td data-label="Position">#46</td>
-    <td data-label="Username">Roque</td>
-    <td data-label="Plating"><span class="badge badge-none">None</span></td>
-    <td data-label="Rank">Bruglione</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1">Allin</td><td data-label="Shooter 2">Kickass</td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">92</td>
-    <td data-label="Username">Gernas</td>
-    <td data-label="Plating"><span class="badge badge-low">Very Low</span></td>
-    <td data-label="Rank">Local Chief</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">96</td>
-    <td data-label="Username">Kaleli</td>
-    <td data-label="Plating"><span class="badge badge-none">None</span></td>
-    <td data-label="Rank">Bruglione</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">101</td>
-    <td data-label="Username">Mkk</td>
-    <td data-label="Plating"><span class="badge badge-low">Very Low</span></td>
-    <td data-label="Rank">Bruglione</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">106</td>
-    <td data-label="Username">Namaste</td>
-    <td data-label="Plating"><span class="badge badge-none">None</span></td>
-    <td data-label="Rank">Bruglione</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">118</td>
-    <td data-label="Username">Avenger</td>
-    <td data-label="Plating"><span class="badge badge-none">None</span></td>
-    <td data-label="Rank">Bruglione</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">138</td>
-    <td data-label="Username">Kuzgun</td>
-    <td data-label="Plating"><span class="badge badge-none">None</span></td>
-    <td data-label="Rank">Bruglione</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">143</td>
-    <td data-label="Username">Bc</td>
-    <td data-label="Plating"><span class="badge badge-none">None</span></td>
-    <td data-label="Rank">Chief</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">145</td>
-    <td data-label="Username">Rebit</td>
-    <td data-label="Plating"><span class="badge badge-low">Very Low</span></td>
-    <td data-label="Rank">Bruglione</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">146</td>
-    <td data-label="Username">Javanase</td>
-    <td data-label="Plating"><span class="badge badge-none">None</span></td>
-    <td data-label="Rank">Bruglione</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">187</td>
-    <td data-label="Username">Tm</td>
-    <td data-label="Plating"><span class="badge badge-none">None</span></td>
-    <td data-label="Rank">Bruglione</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">234</td>
-    <td data-label="Username">Protesto</td>
-    <td data-label="Plating"><span class="badge badge-low">Very Low</span></td>
-    <td data-label="Rank">Bruglione</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">241</td>
-    <td data-label="Username">Tekk</td>
-    <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
-    <td data-label="Rank">Bruglione</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">244</td>
-    <td data-label="Username">Ataa</td>
-    <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
-    <td data-label="Rank">Bruglione</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">261</td>
-    <td data-label="Username">Sor</td>
-    <td data-label="Plating"><span class="badge badge-low">Very Low</span></td>
-    <td data-label="Rank">Bruglione</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">270</td>
-    <td data-label="Username">Combat</td>
-    <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
-    <td data-label="Rank">Chief</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">336</td>
-    <td data-label="Username">Musamba</td>
-    <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
-    <td data-label="Rank">Chief</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">337</td>
-    <td data-label="Username">Hagi</td>
-    <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
-    <td data-label="Rank">Bruglione</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">407</td>
-    <td data-label="Username">Lm</td>
-    <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
-    <td data-label="Rank">Chief</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">409</td>
-    <td data-label="Username">Asy</td>
-    <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
-    <td data-label="Rank">Local Chief</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">443</td>
-    <td data-label="Username">Xxdangerouss</td>
-    <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
-    <td data-label="Rank">Local Chief</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">463</td>
-    <td data-label="Username">Smirnoff</td>
-    <td data-label="Plating"><span class="badge badge-none">None</span></td>
-    <td data-label="Rank">Local Chief</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">483</td>
-    <td data-label="Username">Oh</td>
-    <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
-    <td data-label="Rank">Local Chief</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">485</td>
-    <td data-label="Username">Gariban</td>
-    <td data-label="Plating"><span class="badge badge-none">None</span></td>
-    <td data-label="Rank">Chief</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">504</td>
-    <td data-label="Username">Hotplay</td>
-    <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
-    <td data-label="Rank">Local Chief</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">517</td>
-    <td data-label="Username">Clove</td>
-    <td data-label="Plating"><span class="badge badge-low">Very Low</span></td>
-    <td data-label="Rank">Local Chief</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">558</td>
-    <td data-label="Username">Galatasaray</td>
-    <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
-    <td data-label="Rank">Local Chief</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-  <tr>
-    <td data-label="Position">662</td>
-    <td data-label="Username">Cemil</td>
-    <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
-    <td data-label="Rank">Local Chief</td>
-    <td data-label="Family">Veterans</td>
-    <td data-label="Shooter 1"></td><td data-label="Shooter 2"></td><td data-label="Following"></td>
-  </tr>
-</tbody>
+      <tbody>
+        <tr data-id="46">
+          <td data-label="Position">#46</td>
+          <td data-label="Username">Roque</td>
+          <td data-label="Plating"><span class="badge badge-none">None</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
 
+        <tr data-id="59">
+          <td data-label="Position">#59</td>
+          <td data-label="Username">Quant</td>
+          <td data-label="Plating"><span class="badge badge-none">None</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="92">
+          <td data-label="Position">92</td>
+          <td data-label="Username">Gernas</td>
+          <td data-label="Plating"><span class="badge badge-low">Very Low</span></td>
+          <td data-label="Rank">Local Chief</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="96">
+          <td data-label="Position">96</td>
+          <td data-label="Username">Kaleli</td>
+          <td data-label="Plating"><span class="badge badge-none">None</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="101">
+          <td data-label="Position">101</td>
+          <td data-label="Username">Mkk</td>
+          <td data-label="Plating"><span class="badge badge-low">Very Low</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="106">
+          <td data-label="Position">106</td>
+          <td data-label="Username">Namaste</td>
+          <td data-label="Plating"><span class="badge badge-none">None</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="118">
+          <td data-label="Position">118</td>
+          <td data-label="Username">Avenger</td>
+          <td data-label="Plating"><span class="badge badge-none">None</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="119">
+          <td data-label="Position">119</td>
+          <td data-label="Username">Timur</td>
+          <td data-label="Plating"><span class="badge badge-none">None</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="138">
+          <td data-label="Position">138</td>
+          <td data-label="Username">Kuzgun</td>
+          <td data-label="Plating"><span class="badge badge-none">None</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="143">
+          <td data-label="Position">143</td>
+          <td data-label="Username">Bc</td>
+          <td data-label="Plating"><span class="badge badge-none">None</span></td>
+          <td data-label="Rank">Chief</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="145">
+          <td data-label="Position">145</td>
+          <td data-label="Username">Rebit</td>
+          <td data-label="Plating"><span class="badge badge-low">Very Low</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="146">
+          <td data-label="Position">146</td>
+          <td data-label="Username">Javanase</td>
+          <td data-label="Plating"><span class="badge badge-none">None</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="187">
+          <td data-label="Position">187</td>
+          <td data-label="Username">Tm</td>
+          <td data-label="Plating"><span class="badge badge-none">None</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="234">
+          <td data-label="Position">234</td>
+          <td data-label="Username">Protesto</td>
+          <td data-label="Plating"><span class="badge badge-low">Very Low</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="241">
+          <td data-label="Position">241</td>
+          <td data-label="Username">Tekk</td>
+          <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="244">
+          <td data-label="Position">244</td>
+          <td data-label="Username">Ataa</td>
+          <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="261">
+          <td data-label="Position">261</td>
+          <td data-label="Username">Sor</td>
+          <td data-label="Plating"><span class="badge badge-low">Very Low</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="270">
+          <td data-label="Position">270</td>
+          <td data-label="Username">Combat</td>
+          <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
+          <td data-label="Rank">Chief</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="336">
+          <td data-label="Position">336</td>
+          <td data-label="Username">Musamba</td>
+          <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
+          <td data-label="Rank">Chief</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="337">
+          <td data-label="Position">337</td>
+          <td data-label="Username">Hagi</td>
+          <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
+          <td data-label="Rank">Bruglione</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="407">
+          <td data-label="Position">407</td>
+          <td data-label="Username">Lm</td>
+          <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
+          <td data-label="Rank">Chief</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="409">
+          <td data-label="Position">409</td>
+          <td data-label="Username">Asy</td>
+          <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
+          <td data-label="Rank">Local Chief</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="443">
+          <td data-label="Position">443</td>
+          <td data-label="Username">Xxdangerouss</td>
+          <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
+          <td data-label="Rank">Local Chief</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="463">
+          <td data-label="Position">463</td>
+          <td data-label="Username">Smirnoff</td>
+          <td data-label="Plating"><span class="badge badge-none">None</span></td>
+          <td data-label="Rank">Local Chief</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="483">
+          <td data-label="Position">483</td>
+          <td data-label="Username">Oh</td>
+          <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
+          <td data-label="Rank">Local Chief</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="485">
+          <td data-label="Position">485</td>
+          <td data-label="Username">Gariban</td>
+          <td data-label="Plating"><span class="badge badge-none">None</span></td>
+          <td data-label="Rank">Chief</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="504">
+          <td data-label="Position">504</td>
+          <td data-label="Username">Hotplay</td>
+          <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
+          <td data-label="Rank">Local Chief</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="517">
+          <td data-label="Position">517</td>
+          <td data-label="Username">Clove</td>
+          <td data-label="Plating"><span class="badge badge-low">Very Low</span></td>
+          <td data-label="Rank">Local Chief</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="558">
+          <td data-label="Position">558</td>
+          <td data-label="Username">Galatasaray</td>
+          <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
+          <td data-label="Rank">Local Chief</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+
+        <tr data-id="662">
+          <td data-label="Position">662</td>
+          <td data-label="Username">Cemil</td>
+          <td data-label="Plating"><span class="badge badge-high">Very High</span></td>
+          <td data-label="Rank">Local Chief</td>
+          <td data-label="Family">Veterans</td>
+          <td data-label="Shooter 1" contenteditable="true" data-field="shooter1"></td>
+          <td data-label="Shooter 2" contenteditable="true" data-field="shooter2"></td>
+          <td data-label="Following" contenteditable="true" data-field="following"></td>
+        </tr>
+      </tbody>
     </table>
   </div>
 
   <script>
+    /***********************
+     * 1) TRI (clic headers)
+     ***********************/
     (function(){
       const table = document.getElementById("veteransTable");
       const tbody = table.querySelector("tbody");
       const headers = Array.from(table.querySelectorAll("thead th"));
 
-      // Ordre logique pour Plating
       const platingScore = (v) => {
         const s = (v || "").trim().toLowerCase();
         if (!s || s === "none") return 0;
@@ -382,11 +523,10 @@
         if (s === "medium") return 3;
         if (s === "high") return 4;
         if (s === "very high") return 5;
-        return 999; // inconnu
+        return 999;
       };
 
       const parsePosition = (v) => {
-        // accepte "#46", "46", " 46 "
         const m = String(v || "").match(/(\d+)/);
         return m ? parseInt(m[1], 10) : Number.POSITIVE_INFINITY;
       };
@@ -394,7 +534,6 @@
       const getCellText = (row, idx) => {
         const cell = row.children[idx];
         if (!cell) return "";
-        // si badge -> prends le texte du badge
         const badge = cell.querySelector(".badge");
         if (badge) return badge.textContent.trim();
         return cell.textContent.trim();
@@ -419,19 +558,13 @@
           const bv = getCellText(b, idx);
 
           let cmp = 0;
-
-          if (type === "position") {
-            cmp = parsePosition(av) - parsePosition(bv);
-          } else if (type === "plating") {
-            cmp = platingScore(av) - platingScore(bv);
-          } else {
-            cmp = av.localeCompare(bv, undefined, { numeric:true, sensitivity:"base" });
-          }
+          if (type === "position") cmp = parsePosition(av) - parsePosition(bv);
+          else if (type === "plating") cmp = platingScore(av) - platingScore(bv);
+          else cmp = av.localeCompare(bv, undefined, { numeric:true, sensitivity:"base" });
 
           return currentSort.asc ? cmp : -cmp;
         });
 
-        // Re-append dans le nouvel ordre
         rows.forEach(r => tbody.appendChild(r));
         updateIndicators();
       };
@@ -447,7 +580,124 @@
 
       updateIndicators();
     })();
-  </script>
 
+    /********************************************
+     * 2) EDIT PARTAGÉ (Google Sheets via Script)
+     ********************************************/
+    (function(){
+      const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJh2mWkJW-ak-6GrP0E9EStKDnH0O0NU_4CZTA6uMOUkEc-yM3tPcE8rN23lcsxVhIDA/exec";
+      const API_KEY = "ArkhamCoreSecret123";
+
+      const table = document.getElementById("veteransTable");
+      const tbody = table.querySelector("tbody");
+
+      const statusDot = document.getElementById("statusDot");
+      const statusText = document.getElementById("statusText");
+
+      function setStatus(kind, text){
+        statusDot.classList.remove("ok","bad");
+        if (kind === "ok") statusDot.classList.add("ok");
+        if (kind === "bad") statusDot.classList.add("bad");
+        statusText.textContent = text;
+      }
+
+      async function loadSharedData(){
+        try{
+          setStatus("", "Chargement…");
+          const url = `${SCRIPT_URL}?key=${encodeURIComponent(API_KEY)}`;
+          const res = await fetch(url, { cache: "no-store" });
+          const json = await res.json();
+
+          if (!json.ok){
+            console.warn("Load failed:", json);
+            setStatus("bad", "Erreur de chargement");
+            return;
+          }
+
+          tbody.querySelectorAll("tr[data-id]").forEach(tr => {
+            const id = tr.getAttribute("data-id");
+            const row = json.rows && json.rows[id];
+            if (!row) return;
+
+            tr.querySelectorAll("td[data-field]").forEach(td => {
+              const field = td.getAttribute("data-field");
+              td.textContent = (row[field] ?? "").toString();
+            });
+          });
+
+          setStatus("ok", "Données partagées chargées");
+        } catch (e){
+          console.warn(e);
+          setStatus("bad", "Erreur réseau (load)");
+        }
+      }
+
+      async function saveCell(tr, field, value){
+        const id = tr.getAttribute("data-id");
+        if (!id) return;
+
+        const payload = { id, field, value };
+
+        try{
+          const res = await fetch(`${SCRIPT_URL}?key=${encodeURIComponent(API_KEY)}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          let json = null;
+          try { json = await res.json(); } catch {}
+
+          if (!json || !json.ok){
+            console.warn("Save failed:", json);
+            setStatus("bad", "Erreur de sauvegarde");
+            return;
+          }
+
+          setStatus("ok", "Sauvegardé");
+        } catch (e){
+          console.warn(e);
+          setStatus("bad", "Erreur réseau (save)");
+        }
+      }
+
+      // Debounce par cellule (évite spam)
+      const pending = new Map();
+      const cellKey = (tr, field) => `${tr.getAttribute("data-id")}:${field}`;
+
+      table.addEventListener("blur", (e) => {
+        const td = e.target.closest("td[data-field][contenteditable='true']");
+        if (!td) return;
+
+        const tr = td.closest("tr[data-id]");
+        if (!tr) return;
+
+        const field = td.getAttribute("data-field");
+        let value = (td.textContent || "").trim();
+
+        // limite simple
+        value = value.slice(0, 40);
+        td.textContent = value;
+
+        const k = cellKey(tr, field);
+        if (pending.get(k)) clearTimeout(pending.get(k));
+
+        td.setAttribute("data-saving", "true");
+        pending.set(k, setTimeout(async () => {
+          await saveCell(tr, field, value);
+          td.removeAttribute("data-saving");
+        }, 250));
+      }, true);
+
+      // Enter = sortir de la cellule
+      table.addEventListener("keydown", (e) => {
+        const td = e.target.closest("td[data-field][contenteditable='true']");
+        if (!td) return;
+        if (e.key === "Enter") { e.preventDefault(); td.blur(); }
+      });
+
+      loadSharedData();
+    })();
+  </script>
 </body>
 </html>
