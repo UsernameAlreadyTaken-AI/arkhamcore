@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Liste</title>
+
+  <style>
+    :root{
+      --border:#e5e7eb;
+      --muted:#475569;
+      --head:#f8fafc;
+      --shadow: 0 1px 2px rgba(0,0,0,.04);
+    }
+    body{
+      margin:0;
+      background:#fff;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:#0f172a;
+    }
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:12px;
+    }
+
+    .topbar{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .title{
+      font-size:18px;
+      font-weight:800;
+      margin:0;
+    }
+    .hint{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.3;
+    }
+
+    table.responsive{
+      width:100%;
+      border-collapse:collapse;
+      font-size:14px;
+    }
+    th, td{
+      border:1px solid var(--border);
+      padding:10px 12px;
+      text-align:left;
+      vertical-align:middle;
+    }
+    thead th{
+      background:var(--head);
+      font-weight:800;
+      position:sticky;
+      top:0;
+      z-index:1;
+      user-select:none;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    thead th .sort-ind{
+      font-size:12px;
+      color:var(--muted);
+      margin-left:6px;
+    }
+
+    .badge{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:12px;
+      border:1px solid var(--border);
+      white-space:nowrap;
+    }
+    .badge-none{ background:#f3f4f6; }
+    .badge-low{ background:#fee2e2; border-color:#fecaca; }
+    .badge-high{ background:#dcfce7; border-color:#bbf7d0; }
+
+    @media (max-width: 720px){
+      table.responsive thead{ display:none; }
+      table.responsive, table.responsive tbody, table.responsive tr, table.responsive td{
+        display:block;
+        width:100%;
+      }
+      table.responsive tr{
+        border:1px solid var(--border);
+        border-radius:12px;
+        overflow:hidden;
+        margin-bottom:12px;
+        background:#fff;
+        box-shadow:var(--shadow);
+      }
+      table.responsive td{
+        border:none;
+        border-bottom:1px solid #f1f5f9;
+        padding:10px 12px;
+        display:grid;
+        grid-template-columns:120px 1fr;
+        gap:10px;
+      }
+      table.responsive td:last-child{ border-bottom:none; }
+      table.responsive td::before{
+        content:attr(data-label);
+        font-weight:800;
+        color:var(--muted);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div>
+        <h1 class="title">Liste</h1>
+        <div class="hint">Clique sur un en-tête (Position, Username, etc.) pour trier. Re-clique pour inverser.</div>
+      </div>
+    </div>
+
+    <table class="responsive" id="listTable">
+      <thead>
+        <tr>
+          <th data-type="position">Position<span class="sort-ind"></span></th>
+          <th data-type="text">Username<span class="sort-ind"></span></th>
+          <th data-type="plating">Plating<span class="sort-ind"></span></th>
+          <th data-type="text">Rank<span class="sort-ind"></span></th>
+          <th data-type="text">Family<span class="sort-ind"></span></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr><td data-label="Position">24</td><td data-label="Username">Gyokeres</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Godfather</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">27</td><td data-label="Username">Ti</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">28</td><td data-label="Username">Kill</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">63</td><td data-label="Username">Prestige</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">13</td><td data-label="Username">Dixon</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">22</td><td data-label="Username">Gambit</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">78</td><td data-label="Username">Ester</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">93</td><td data-label="Username">Luna</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">118</td><td data-label="Username">Gangsterboy</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">50</td><td data-label="Username">Jordi</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">111</td><td data-label="Username">Hero</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">130</td><td data-label="Username">Chavez</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">97</td><td data-label="Username">Lansky</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">43</td><td data-label="Username">Allin</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">108</td><td data-label="Username">Farewell</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">163</td><td data-label="Username">Kristin</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">256</td><td data-label="Username">Chuggarn</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">157</td><td data-label="Username">Typhon</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">119</td><td data-label="Username">Zagreus</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">255</td><td data-label="Username">Dr</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">242</td><td data-label="Username">Star</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">175</td><td data-label="Username">Cocainman</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">129</td><td data-label="Username">Epstein</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">117</td><td data-label="Username">Didem</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">118</td><td data-label="Username">Filu</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Local Chief</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">298</td><td data-label="Username">Flaip</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Local Chief</td><td data-label="Family">Imp</td></tr>
+        <tr><td data-label="Position">56</td><td data-label="Username">Rage</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imposters</td></tr>
+
+        <tr><td data-label="Position">12</td><td data-label="Username">Maggie</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">First Lady</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">121</td><td data-label="Username">Adonis</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">51</td><td data-label="Username">Saiyan</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">125</td><td data-label="Username">Sand</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">126</td><td data-label="Username">Karamamba</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">127</td><td data-label="Username">Hm</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">141</td><td data-label="Username">Laggalot</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">74</td><td data-label="Username">Muen</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">145</td><td data-label="Username">Kaffe</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">152</td><td data-label="Username">Random</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">204</td><td data-label="Username">Hbk</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Chief</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">280</td><td data-label="Username">Killosma</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">265</td><td data-label="Username">Dany</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">194</td><td data-label="Username">Gom</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">297</td><td data-label="Username">Dimarco</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">321</td><td data-label="Username">Renegade</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Local Chief</td><td data-label="Family">Chimp</td></tr>
+        <tr><td data-label="Position">299</td><td data-label="Username">Resist</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Local Chief</td><td data-label="Family">Chimp</td></tr>
+
+        <tr><td data-label="Position">14</td><td data-label="Username">Vindicta</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Godfather</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">34</td><td data-label="Username">Bm</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Capodecina</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">66</td><td data-label="Username">Mm</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">19</td><td data-label="Username">Najdorf</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">29</td><td data-label="Username">Ais</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">109</td><td data-label="Username">Javier</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">80</td><td data-label="Username">Mrchang</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">42</td><td data-label="Username">Milo</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">101</td><td data-label="Username">Kralice</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">176</td><td data-label="Username">Pimba</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">140</td><td data-label="Username">Warboel</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">146</td><td data-label="Username">Tango</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">132</td><td data-label="Username">Reiki</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">167</td><td data-label="Username">Mrbranco</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">147</td><td data-label="Username">Urukhai</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">206</td><td data-label="Username">Obayana</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">149</td><td data-label="Username">Klitschko</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Chief</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">233</td><td data-label="Username">Mangano</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">273</td><td data-label="Username">Zort</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">398</td><td data-label="Username">Hl</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">156</td><td data-label="Username">Kamikaza</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Chief</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">382</td><td data-label="Username">Ellisekiz</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Local Chief</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">324</td><td data-label="Username">Pietpiel</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Local Chief</td><td data-label="Family">Simp</td></tr>
+        <tr><td data-label="Position">297</td><td data-label="Username">Xd</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Local Chief</td><td data-label="Family">Simp</td></tr>
+
+        <tr><td data-label="Position">10</td><td data-label="Username">Octavianus</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Godfather</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">16</td><td data-label="Username">Daemon</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Capodecina</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">2</td><td data-label="Username">Mowgli</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Capodecina</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">79</td><td data-label="Username">Huslia</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">37</td><td data-label="Username">Gimli</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">90</td><td data-label="Username">Helen</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">68</td><td data-label="Username">Len</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">47</td><td data-label="Username">Tick</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">35</td><td data-label="Username">Odin</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">86</td><td data-label="Username">Gtir</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">89</td><td data-label="Username">Vyper</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">17</td><td data-label="Username">Noth</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">8</td><td data-label="Username">Blizzak</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">123</td><td data-label="Username">Ravnos</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">133</td><td data-label="Username">Katie</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">70</td><td data-label="Username">Bxwzq</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">238</td><td data-label="Username">Guess</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">207</td><td data-label="Username">Pecadores</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">195</td><td data-label="Username">Trent</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">390</td><td data-label="Username">Palmer - Chief</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">394</td><td data-label="Username">Tape</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">158</td><td data-label="Username">Lotr</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">20</td><td data-label="Username">Montepulzio</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Chief</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">153</td><td data-label="Username">Tali</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Chief</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">134</td><td data-label="Username">Mr</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Chief</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">326</td><td data-label="Username">Vabis</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">94</td><td data-label="Username">Kazem</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Chief</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">266</td><td data-label="Username">Peter</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">350</td><td data-label="Username">Bonk</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Pimp</td></tr>
+        <tr><td data-label="Position">210</td><td data-label="Username">Gianluca</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Chief</td><td data-label="Family">Pimp</td></tr>
+
+        <tr><td data-label="Position">5</td><td data-label="Username">Dictator</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Godfather</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">23</td><td data-label="Username">Mandy</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Capodecina</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">26</td><td data-label="Username">Kai</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Capodecina</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">11</td><td data-label="Username">Sinanates</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Capodecina</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">21</td><td data-label="Username">Soth</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">4</td><td data-label="Username">Boz</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">53</td><td data-label="Username">Adler</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">18</td><td data-label="Username">Naish</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">48</td><td data-label="Username">Dext</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">25</td><td data-label="Username">Umay</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">72</td><td data-label="Username">Carneglia</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">67</td><td data-label="Username">Alonso</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">62</td><td data-label="Username">Inara</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">41</td><td data-label="Username">Run</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">60</td><td data-label="Username">Gypsy</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">45</td><td data-label="Username">Fdpazzi</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">82</td><td data-label="Username">Rhevyn</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">31</td><td data-label="Username">Mathieu</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">87</td><td data-label="Username">Claret</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">85</td><td data-label="Username">Gufy</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">69</td><td data-label="Username">Capitano</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">103</td><td data-label="Username">Pokketi</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">65</td><td data-label="Username">Mike</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">64</td><td data-label="Username">Bugsy</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">52</td><td data-label="Username">Guevara</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">107</td><td data-label="Username">Steve</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">58</td><td data-label="Username">Maaka</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">49</td><td data-label="Username">Mrhandsome</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">154</td><td data-label="Username">Yeager</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">104</td><td data-label="Username">Onlyfans</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">71</td><td data-label="Username">Oebiwan</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">166</td><td data-label="Username">Slowpokee</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">105</td><td data-label="Username">Oki</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">113</td><td data-label="Username">Hetty</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">9</td><td data-label="Username">Ariella</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Bruglione</td><td data-label="Family">Imperium</td></tr>
+
+        <tr><td data-label="Position">99</td><td data-label="Username">Trader</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">160</td><td data-label="Username">Anja</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">170</td><td data-label="Username">Lavanta</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">92</td><td data-label="Username">Palermo</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">182</td><td data-label="Username">Originalplum</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">77</td><td data-label="Username">Guardian</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">137</td><td data-label="Username">Whip</td><td data-label="Plating"><span class="badge badge-none">None</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">219</td><td data-label="Username">Sleepy</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">386</td><td data-label="Username">Bynewell</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">30</td><td data-label="Username">Efendy</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">135</td><td data-label="Username">Sabozade</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Chief</td><td data-label="Family">Imperium</td></tr>
+
+        <tr><td data-label="Position">208</td><td data-label="Username">Eru</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Local Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">100</td><td data-label="Username">Amstaff</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Local Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">283</td><td data-label="Username">Bonez</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Local Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">287</td><td data-label="Username">Yess</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Local Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">*</td><td data-label="Username">Kickasses</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Local Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">*</td><td data-label="Username">Sins</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Local Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">257</td><td data-label="Username">Jos</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Local Chief</td><td data-label="Family">Imperium</td></tr>
+        <tr><td data-label="Position">261</td><td data-label="Username">Diablo</td><td data-label="Plating"><span class="badge badge-low">Very Low</span></td><td data-label="Rank">Local Chief</td><td data-label="Family">Imperium</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    (function(){
+      const table = document.getElementById("listTable");
+      const tbody = table.querySelector("tbody");
+      const headers = Array.from(table.querySelectorAll("thead th"));
+
+      const platingScore = (v) => {
+        const s = (v || "").trim().toLowerCase();
+        if (!s || s === "none") return 0;
+        if (s === "very low") return 1;
+        if (s === "low") return 2;
+        if (s === "medium") return 3;
+        if (s === "high") return 4;
+        if (s === "very high") return 5;
+        return 999;
+      };
+
+      const parsePosition = (v) => {
+        const s = String(v || "").trim();
+        if (s === "*") return Number.POSITIVE_INFINITY; // les * vont à la fin
+        const m = s.match(/(\d+)/);
+        return m ? parseInt(m[1], 10) : Number.POSITIVE_INFINITY;
+      };
+
+      const getCellText = (row, idx) => {
+        const cell = row.children[idx];
+        if (!cell) return "";
+        const badge = cell.querySelector(".badge");
+        if (badge) return badge.textContent.trim();
+        return cell.textContent.trim();
+      };
+
+      let currentSort = { idx: 0, asc: true };
+
+      const updateIndicators = () => {
+        headers.forEach((h, i) => {
+          const ind = h.querySelector(".sort-ind");
+          if (!ind) return;
+          if (i === currentSort.idx) ind.textContent = currentSort.asc ? "▲" : "▼";
+          else ind.textContent = "";
+        });
+      };
+
+      const sortBy = (idx, type) => {
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+        rows.sort((a,b) => {
+          const av = getCellText(a, idx);
+          const bv = getCellText(b, idx);
+
+          let cmp = 0;
+          if (type === "position") cmp = parsePosition(av) - parsePosition(bv);
+          else if (type === "plating") cmp = platingScore(av) - platingScore(bv);
+          else cmp = av.localeCompare(bv, undefined, { numeric:true, sensitivity:"base" });
+
+          return currentSort.asc ? cmp : -cmp;
+        });
+
+        rows.forEach(r => tbody.appendChild(r));
+        updateIndicators();
+      };
+
+      headers.forEach((h, idx) => {
+        const type = h.getAttribute("data-type") || "text";
+        h.addEventListener("click", () => {
+          if (currentSort.idx === idx) currentSort.asc = !currentSort.asc;
+          else { currentSort.idx = idx; currentSort.asc = true; }
+          sortBy(idx, type);
+        });
+      });
+
+      updateIndicators();
+    })();
+  </script>
+</body>
+</html>
