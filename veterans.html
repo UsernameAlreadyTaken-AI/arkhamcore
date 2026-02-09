@@ -506,112 +506,36 @@
     </table>
   </div>
 
-  <script>
-    /***********************
-     * 1) TRI (clic headers)
-     ***********************/
-    (function(){
-      const table = document.getElementById("veteransTable");
-      const tbody = table.querySelector("tbody");
-      const headers = Array.from(table.querySelectorAll("thead th"));
+<script>
+(function(){
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJh2mWkJW-ak-6GrP0E9EStKDnH0O0NU_4CZTA6uMOUkEc-yM3tPcE8rN23lcsxVhIDA/exec";
+  const API_KEY = "ArkhamCoreSecret123";
 
-      const platingScore = (v) => {
-        const s = (v || "").trim().toLowerCase();
-        if (!s || s === "none") return 0;
-        if (s === "very low") return 1;
-        if (s === "low") return 2;
-        if (s === "medium") return 3;
-        if (s === "high") return 4;
-        if (s === "very high") return 5;
-        return 999;
-      };
+  const table = document.getElementById("veteransTable");
+  const tbody = table.querySelector("tbody");
 
-      const parsePosition = (v) => {
-        const m = String(v || "").match(/(\d+)/);
-        return m ? parseInt(m[1], 10) : Number.POSITIVE_INFINITY;
-      };
+  const statusDot = document.getElementById("statusDot");
+  const statusText = document.getElementById("statusText");
 
-      const getCellText = (row, idx) => {
-        const cell = row.children[idx];
-        if (!cell) return "";
-        const badge = cell.querySelector(".badge");
-        if (badge) return badge.textContent.trim();
-        return cell.textContent.trim();
-      };
+  function setStatus(kind, text){
+    statusDot.classList.remove("ok","bad");
+    if (kind === "ok") statusDot.classList.add("ok");
+    if (kind === "bad") statusDot.classList.add("bad");
+    statusText.textContent = text;
+  }
 
-      let currentSort = { idx: 0, asc: true };
+  // ---- JSONP LOAD (évite CORS) ----
+  function loadSharedData(){
+    return new Promise((resolve) => {
+      setStatus("", "Chargement…");
 
-      const updateIndicators = () => {
-        headers.forEach((h, i) => {
-          const ind = h.querySelector(".sort-ind");
-          if (!ind) return;
-          if (i === currentSort.idx) ind.textContent = currentSort.asc ? "▲" : "▼";
-          else ind.textContent = "";
-        });
-      };
-
-      const sortBy = (idx, type) => {
-        const rows = Array.from(tbody.querySelectorAll("tr"));
-
-        rows.sort((a,b) => {
-          const av = getCellText(a, idx);
-          const bv = getCellText(b, idx);
-
-          let cmp = 0;
-          if (type === "position") cmp = parsePosition(av) - parsePosition(bv);
-          else if (type === "plating") cmp = platingScore(av) - platingScore(bv);
-          else cmp = av.localeCompare(bv, undefined, { numeric:true, sensitivity:"base" });
-
-          return currentSort.asc ? cmp : -cmp;
-        });
-
-        rows.forEach(r => tbody.appendChild(r));
-        updateIndicators();
-      };
-
-      headers.forEach((h, idx) => {
-        const type = h.getAttribute("data-type") || "text";
-        h.addEventListener("click", () => {
-          if (currentSort.idx === idx) currentSort.asc = !currentSort.asc;
-          else { currentSort.idx = idx; currentSort.asc = true; }
-          sortBy(idx, type);
-        });
-      });
-
-      updateIndicators();
-    })();
-
-    /********************************************
-     * 2) EDIT PARTAGÉ (Google Sheets via Script)
-     ********************************************/
-    (function(){
-      const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJh2mWkJW-ak-6GrP0E9EStKDnH0O0NU_4CZTA6uMOUkEc-yM3tPcE8rN23lcsxVhIDA/exec";
-      const API_KEY = "ArkhamCoreSecret123";
-
-      const table = document.getElementById("veteransTable");
-      const tbody = table.querySelector("tbody");
-
-      const statusDot = document.getElementById("statusDot");
-      const statusText = document.getElementById("statusText");
-
-      function setStatus(kind, text){
-        statusDot.classList.remove("ok","bad");
-        if (kind === "ok") statusDot.classList.add("ok");
-        if (kind === "bad") statusDot.classList.add("bad");
-        statusText.textContent = text;
-      }
-
-      async function loadSharedData(){
-        try{
-          setStatus("", "Chargement…");
-          const url = `${SCRIPT_URL}?key=${encodeURIComponent(API_KEY)}`;
-          const res = await fetch(url, { cache: "no-store" });
-          const json = await res.json();
-
-          if (!json.ok){
+      const cbName = "cb_" + Math.random().toString(36).slice(2);
+      window[cbName] = (json) => {
+        try {
+          if (!json || !json.ok) {
             console.warn("Load failed:", json);
             setStatus("bad", "Erreur de chargement");
-            return;
+            return resolve(false);
           }
 
           tbody.querySelectorAll("tr[data-id]").forEach(tr => {
@@ -626,78 +550,77 @@
           });
 
           setStatus("ok", "Données partagées chargées");
-        } catch (e){
-          console.warn(e);
-          setStatus("bad", "Erreur réseau (load)");
+          resolve(true);
+        } finally {
+          delete window[cbName];
+          script.remove();
         }
-      }
+      };
 
-      async function saveCell(tr, field, value){
-        const id = tr.getAttribute("data-id");
-        if (!id) return;
+      const url =
+        `${SCRIPT_URL}?action=list&key=${encodeURIComponent(API_KEY)}&callback=${encodeURIComponent(cbName)}&t=${Date.now()}`;
 
-        const payload = { id, field, value };
+      const script = document.createElement("script");
+      script.src = url;
+      script.onerror = () => {
+        delete window[cbName];
+        script.remove();
+        setStatus("bad", "Erreur réseau (load)");
+        resolve(false);
+      };
+      document.head.appendChild(script);
+    });
+  }
 
-        try{
-          const res = await fetch(`${SCRIPT_URL}?key=${encodeURIComponent(API_KEY)}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          });
+  // ---- SAVE via GET "beacon" (pas besoin de lire la réponse) ----
+  function saveCell(tr, field, value){
+    const id = tr.getAttribute("data-id");
+    if (!id) return;
 
-          let json = null;
-          try { json = await res.json(); } catch {}
+    const url =
+      `${SCRIPT_URL}?action=save&key=${encodeURIComponent(API_KEY)}&id=${encodeURIComponent(id)}&field=${encodeURIComponent(field)}&value=${encodeURIComponent(value)}&t=${Date.now()}`;
 
-          if (!json || !json.ok){
-            console.warn("Save failed:", json);
-            setStatus("bad", "Erreur de sauvegarde");
-            return;
-          }
+    // Fire-and-forget: Image() évite CORS (on ne lit pas la réponse)
+    const img = new Image();
+    img.src = url;
 
-          setStatus("ok", "Sauvegardé");
-        } catch (e){
-          console.warn(e);
-          setStatus("bad", "Erreur réseau (save)");
-        }
-      }
+    setStatus("ok", "Sauvegardé");
+  }
 
-      // Debounce par cellule (évite spam)
-      const pending = new Map();
-      const cellKey = (tr, field) => `${tr.getAttribute("data-id")}:${field}`;
+  // Debounce par cellule
+  const pending = new Map();
+  const cellKey = (tr, field) => `${tr.getAttribute("data-id")}:${field}`;
 
-      table.addEventListener("blur", (e) => {
-        const td = e.target.closest("td[data-field][contenteditable='true']");
-        if (!td) return;
+  table.addEventListener("blur", (e) => {
+    const td = e.target.closest("td[data-field][contenteditable='true']");
+    if (!td) return;
 
-        const tr = td.closest("tr[data-id]");
-        if (!tr) return;
+    const tr = td.closest("tr[data-id]");
+    if (!tr) return;
 
-        const field = td.getAttribute("data-field");
-        let value = (td.textContent || "").trim();
+    const field = td.getAttribute("data-field");
+    let value = (td.textContent || "").trim().slice(0, 40);
+    td.textContent = value;
 
-        // limite simple
-        value = value.slice(0, 40);
-        td.textContent = value;
+    const k = cellKey(tr, field);
+    if (pending.get(k)) clearTimeout(pending.get(k));
 
-        const k = cellKey(tr, field);
-        if (pending.get(k)) clearTimeout(pending.get(k));
+    td.setAttribute("data-saving", "true");
+    pending.set(k, setTimeout(() => {
+      saveCell(tr, field, value);
+      td.removeAttribute("data-saving");
+    }, 250));
+  }, true);
 
-        td.setAttribute("data-saving", "true");
-        pending.set(k, setTimeout(async () => {
-          await saveCell(tr, field, value);
-          td.removeAttribute("data-saving");
-        }, 250));
-      }, true);
+  table.addEventListener("keydown", (e) => {
+    const td = e.target.closest("td[data-field][contenteditable='true']");
+    if (!td) return;
+    if (e.key === "Enter") { e.preventDefault(); td.blur(); }
+  });
 
-      // Enter = sortir de la cellule
-      table.addEventListener("keydown", (e) => {
-        const td = e.target.closest("td[data-field][contenteditable='true']");
-        if (!td) return;
-        if (e.key === "Enter") { e.preventDefault(); td.blur(); }
-      });
+  loadSharedData();
+})();
+</script>
 
-      loadSharedData();
-    })();
-  </script>
 </body>
 </html>
