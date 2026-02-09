@@ -1,104 +1,142 @@
-<style>
-  .table-wrap {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 12px;
-  }
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Veterans</title>
 
-  table.responsive {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    font-size: 14px;
-  }
-
-  table.responsive th,
-  table.responsive td {
-    border: 1px solid #e5e7eb;
-    padding: 10px 12px;
-    text-align: left;
-    vertical-align: middle;
-  }
-
-  table.responsive thead th {
-    background: #f8fafc;
-    font-weight: 700;
-    position: sticky; /* utile si tableau long */
-    top: 0;
-    z-index: 1;
-  }
-
-  /* Petits badges pour Plating (facultatif) */
-  .badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-weight: 600;
-    font-size: 12px;
-    border: 1px solid #e5e7eb;
-  }
-  .badge-none { background: #f3f4f6; }
-  .badge-low { background: #fee2e2; border-color: #fecaca; }
-  .badge-high { background: #dcfce7; border-color: #bbf7d0; }
-
-  /* MOBILE: on “casse” le tableau en cartes */
-  @media (max-width: 720px) {
-    table.responsive thead {
-      display: none;
+  <style>
+    :root{
+      --border:#e5e7eb;
+      --muted:#475569;
+      --head:#f8fafc;
+      --shadow: 0 1px 2px rgba(0,0,0,.04);
+    }
+    body{
+      margin:0;
+      background:#fff;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:#0f172a;
+    }
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:12px;
     }
 
-    table.responsive,
-    table.responsive tbody,
-    table.responsive tr,
-    table.responsive td {
-      display: block;
-      width: 100%;
+    .topbar{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .title{
+      font-size:18px;
+      font-weight:800;
+      margin:0;
+    }
+    .hint{
+      font-size:12px;
+      color:var(--muted);
     }
 
-    table.responsive tr {
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 12px;
-      background: white;
-      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    table.responsive{
+      width:100%;
+      border-collapse:collapse;
+      font-size:14px;
+    }
+    th, td{
+      border:1px solid var(--border);
+      padding:10px 12px;
+      text-align:left;
+      vertical-align:middle;
+    }
+    thead th{
+      background:var(--head);
+      font-weight:800;
+      position:sticky;
+      top:0;
+      z-index:1;
+      user-select:none;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    thead th .sort-ind{
+      font-size:12px;
+      color:var(--muted);
+      margin-left:6px;
     }
 
-    table.responsive td {
-      border: none;
-      border-bottom: 1px solid #f1f5f9;
-      padding: 10px 12px;
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 10px;
+    .badge{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:12px;
+      border:1px solid var(--border);
+      white-space:nowrap;
     }
+    .badge-none{ background:#f3f4f6; }
+    .badge-low{ background:#fee2e2; border-color:#fecaca; }
+    .badge-high{ background:#dcfce7; border-color:#bbf7d0; }
 
-    table.responsive td:last-child {
-      border-bottom: none;
+    @media (max-width: 720px){
+      table.responsive thead{ display:none; }
+      table.responsive, table.responsive tbody, table.responsive tr, table.responsive td{
+        display:block;
+        width:100%;
+      }
+      table.responsive tr{
+        border:1px solid var(--border);
+        border-radius:12px;
+        overflow:hidden;
+        margin-bottom:12px;
+        background:#fff;
+        box-shadow:var(--shadow);
+      }
+      table.responsive td{
+        border:none;
+        border-bottom:1px solid #f1f5f9;
+        padding:10px 12px;
+        display:grid;
+        grid-template-columns:120px 1fr;
+        gap:10px;
+      }
+      table.responsive td:last-child{ border-bottom:none; }
+      table.responsive td::before{
+        content:attr(data-label);
+        font-weight:800;
+        color:var(--muted);
+      }
     }
+  </style>
+</head>
 
-    table.responsive td::before {
-      content: attr(data-label);
-      font-weight: 700;
-      color: #475569;
-    }
-  }
-</style>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div>
+        <h1 class="title">Veterans</h1>
+        <div class="hint">Clique sur un en-tête (Position, Username, etc.) pour trier. Re-clique pour inverser.</div>
+      </div>
+    </div>
 
-<div class="table-wrap">
-  <table class="responsive">
-    <thead>
-      <tr>
-        <th>Position</th>
-        <th>Username</th>
-        <th>Plating</th>
-        <th>Rank</th>
-        <th>Family</th>
-        <th>Shooter 1</th>
-        <th>Shooter 2</th>
-        <th>Following</th>
-      </tr>
-    </thead>
+    <table class="responsive" id="veteransTable">
+      <thead>
+        <tr>
+          <th data-key="position" data-type="position">Position<span class="sort-ind"></span></th>
+          <th data-key="username" data-type="text">Username<span class="sort-ind"></span></th>
+          <th data-key="plating" data-type="plating">Plating<span class="sort-ind"></span></th>
+          <th data-key="rank" data-type="text">Rank<span class="sort-ind"></span></th>
+          <th data-key="family" data-type="text">Family<span class="sort-ind"></span></th>
+          <th data-key="shooter1" data-type="text">Shooter 1<span class="sort-ind"></span></th>
+          <th data-key="shooter2" data-type="text">Shooter 2<span class="sort-ind"></span></th>
+          <th data-key="following" data-type="text">Following<span class="sort-ind"></span></th>
+        </tr>
+      </thead>
+
 <tbody>
   <tr>
     <td data-label="Position">#46</td>
@@ -342,5 +380,89 @@
   </tr>
 </tbody>
 
-  </table>
-</div>
+    </table>
+  </div>
+
+  <script>
+    (function(){
+      const table = document.getElementById("veteransTable");
+      const tbody = table.querySelector("tbody");
+      const headers = Array.from(table.querySelectorAll("thead th"));
+
+      // Ordre logique pour Plating
+      const platingScore = (v) => {
+        const s = (v || "").trim().toLowerCase();
+        if (!s || s === "none") return 0;
+        if (s === "very low") return 1;
+        if (s === "low") return 2;
+        if (s === "medium") return 3;
+        if (s === "high") return 4;
+        if (s === "very high") return 5;
+        return 999; // inconnu
+      };
+
+      const parsePosition = (v) => {
+        // accepte "#46", "46", " 46 "
+        const m = String(v || "").match(/(\d+)/);
+        return m ? parseInt(m[1], 10) : Number.POSITIVE_INFINITY;
+      };
+
+      const getCellText = (row, idx) => {
+        const cell = row.children[idx];
+        if (!cell) return "";
+        // si badge -> prends le texte du badge
+        const badge = cell.querySelector(".badge");
+        if (badge) return badge.textContent.trim();
+        return cell.textContent.trim();
+      };
+
+      let currentSort = { idx: 0, asc: true };
+
+      const updateIndicators = () => {
+        headers.forEach((h, i) => {
+          const ind = h.querySelector(".sort-ind");
+          if (!ind) return;
+          if (i === currentSort.idx) ind.textContent = currentSort.asc ? "▲" : "▼";
+          else ind.textContent = "";
+        });
+      };
+
+      const sortBy = (idx, type) => {
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+
+        rows.sort((a,b) => {
+          const av = getCellText(a, idx);
+          const bv = getCellText(b, idx);
+
+          let cmp = 0;
+
+          if (type === "position") {
+            cmp = parsePosition(av) - parsePosition(bv);
+          } else if (type === "plating") {
+            cmp = platingScore(av) - platingScore(bv);
+          } else {
+            cmp = av.localeCompare(bv, undefined, { numeric:true, sensitivity:"base" });
+          }
+
+          return currentSort.asc ? cmp : -cmp;
+        });
+
+        // Re-append dans le nouvel ordre
+        rows.forEach(r => tbody.appendChild(r));
+        updateIndicators();
+      };
+
+      headers.forEach((h, idx) => {
+        const type = h.getAttribute("data-type") || "text";
+        h.addEventListener("click", () => {
+          if (currentSort.idx === idx) currentSort.asc = !currentSort.asc;
+          else { currentSort.idx = idx; currentSort.asc = true; }
+          sortBy(idx, type);
+        });
+      });
+
+      updateIndicators();
+    })();
+  </script>
+</body>
+</html>
